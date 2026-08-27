@@ -1,4 +1,4 @@
-# AERNet-HRNet 复现与优化
+# AERNet 复现与优化
 
 本项目用于复现论文《AERNet: An Attention-Guided Edge Refinement Network and a Dataset for Remote Sensing Building Change Detection》，并在复现原始 AERNet 的基础上，对网络主干结构进行改进。原论文与代码仓库地址为：[https://github.com/zjd1836/AERNet](https://github.com/zjd1836/AERNet)。
 
