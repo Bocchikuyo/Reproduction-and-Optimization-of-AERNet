@@ -1,0 +1,6 @@
+train/
+val/
+test/
+
+!README.md
+!.gitignore
