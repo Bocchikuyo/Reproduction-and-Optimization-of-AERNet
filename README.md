@@ -175,8 +175,6 @@ python train.py
 - `opencv-python`：读取 TIFF 格式遥感图像；
 - `numpy`、`tqdm`：数据处理与训练进度显示。
 
-实际安装时应根据本机 CUDA 与 PyTorch 版本选择匹配的安装命令。
-
-## 参考
+## 参考文献
 
 J. Zhang et al., "AERNet: An Attention-Guided Edge Refinement Network and a Dataset for Remote Sensing Building Change Detection," IEEE Transactions on Geoscience and Remote Sensing, 2023.
