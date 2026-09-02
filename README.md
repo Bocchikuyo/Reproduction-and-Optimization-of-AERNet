@@ -13,19 +13,13 @@ AERNet 面向遥感建筑变化检测任务，输入同一区域两个时相的�
 - 将原始 ResNet34 主干替换为 `HRNet-W18-Small-v2 + 五级 1x1 通道适配器 + ImageNet 预训练` 的改进版本。
 
 主要目录如下：
-
 ```text
-AERNet/
-├── attention/                 # BAM、CoordAtt 等注意力模块
-├── model/
-│   ├── network.py             # 原始 ResNet34 版本 AERNet
-│   ├── network_HRNet.py       # HRNet-W18-Small-v2 改进版本
-│   ├── pretrained/            # ResNet34 与 HRNet 本地预训练权重
-│   └── metric_tool.py         # F1、IoU、Precision、Recall、OA、Kappa 等指标
-├── HRCUS-CD/                  # 数据集目录
-├── runs/                      # 训练日志与 checkpoint
-├── config.py                  # 实验配置
-└── train.py                   # 训练与验证入口
+attention/: BAM、CoordAtt 等注意力模块
+model/: AERNet相关网络模型，包含后续改进的网络模型
+HRCUS-CD/: 数据集目录
+runs/: 训练日志与 checkpoint
+config.py: 实验配置
+train.py: 训练与验证入口
 ```
 
 ## 优化动机
@@ -34,7 +28,7 @@ AERNet/
 
 HRNet 的核心特点是始终保留一条高分辨率分支，并通过多分辨率分支之间的反复交换融合，同时获得空间细节和语义信息。相比“先降采样再上采样”的典型 CNN backbone，HRNet 对边界友好的特征表达更适合遥感建筑变化检测。建筑变化区域通常面积占比较小，且评价指标对假阴性和边界错位很敏感，因此保持高分辨率特征对于提升 Recall、F1 和 IoU 具有直接意义。
 
-基于这一判断，本项目将主干网络从 ResNet34 替换为 HRNet-W18-Small-v2。选择 W18-Small-v2 的原因是它在参数量、显存占用和特征质量之间较为平衡，适合在原 AERNet 解码器不大规模重写的前提下完成结构升级。
+基于这一判断，本项目将主干网络从 ResNet34 替换为 HRNet-W18-Small-v2。选择 W18-Small-v2 的原因是它在参数量、显存占用和特征质量之间较为平衡，适合在原 AERNet 解码器不大规模重写的前提下完成结构优化。
 
 ## 优化方案
 
@@ -120,10 +114,10 @@ HRCUS-CD/
     └── label/
 ```
 
-训练配置在 `config.py` 中修改。当前默认配置为 HRNet-W18-Small-v2 实验：
+训练配置在 `config.py` 中修改。当前配置为示例：
 
 ```python
-name = "03_HRNet-W18-Small-v2"
+name = "<实验名>"
 epochs = 50
 batch = 32
 batch_val = 32
@@ -170,7 +164,7 @@ python train.py
 
 从指标上看，HRNet 版本的 Recall 提升最明显，说明模型更愿意把真实变化区域识别出来；F1 和 IoU 同时提升，说明这种 Recall 增益并不是单纯扩大预测区域带来的无效增益，而是在整体重叠质量上也取得了改善。Precision 小幅下降，表明模型在更积极检测变化区域时引入了一些额外误检，这是后续仍可继续优化的方向，例如进一步调整损失函数、边缘监督权重、阈值策略或加入更细粒度的边界约束。
 
-总体而言，`HRNet-W18-Small-v2 + 五级 1x1 通道适配器 + ImageNet 预训练` 在尽量保留 AERNet 原有结构的同时，提高了主干网络对空间细节的表达能力，使模型更适合建筑变化检测中对边缘精度和小目标召回率要求较高的场景。
+总体而言，`HRNet-W18-Small-v2 + 五级 1x1 通道适配器 + ImageNet 预训练` 的优化版本在尽量保留 AERNet 原有结构的同时，提高了主干网络对空间细节的表达能力，使模型更适合建筑变化检测中对边缘精度和小目标召回率要求较高的场景。
 
 ## 依赖说明
 
@@ -185,5 +179,4 @@ python train.py
 
 ## 参考
 
-- 原始代码仓库：[zjd1836/AERNet](https://github.com/zjd1836/AERNet)
-- 论文：J. Zhang et al., "AERNet: An Attention-Guided Edge Refinement Network and a Dataset for Remote Sensing Building Change Detection," IEEE Transactions on Geoscience and Remote Sensing, 2023.
+J. Zhang et al., "AERNet: An Attention-Guided Edge Refinement Network and a Dataset for Remote Sensing Building Change Detection," IEEE Transactions on Geoscience and Remote Sensing, 2023.
